@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  echo-service:
+    build: .
+    ports:
+      - "5000:5000"
+    tty: true
+    volumes:
+      - type: bind
+        source: ./app
+        target: /app/
+    environment:
+      - FLASK_ENV=development
+    command:
+      python /app/echo.py
