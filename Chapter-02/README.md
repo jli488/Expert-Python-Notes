@@ -33,7 +33,7 @@ Some modifications compare to the script introduced in the *Dockerfile* and *doc
   version: '3.8'
   services:
     echo-service:
-    	# Build the echo service using Dockerfile in previous section
+      # Build the echo service using Dockerfile in previous section
       build: .
       ports:
         - "5000:5000"
