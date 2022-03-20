@@ -66,6 +66,20 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "wait-for-it"
+version = "2.2.1"
+description = "Wait for service(s) to be available before executing a command."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+click = "*"
+
+[package.extras]
+dev = ["black", "click", "flake8", "parameterized", "pytest", "pytest-cov", "twine"]
+
+[[package]]
 name = "werkzeug"
 version = "2.0.3"
 description = "The comprehensive WSGI web application library."
@@ -79,7 +93,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "2fe27c1b6ac77fbf306371b181dba8ef8f59159d2e2444becc9fd425ba7071d7"
+content-hash = "c8bf27f788019d02af7cdad8256376ce925801de39ec7603ec2dd505e5eb0613"
 
 [metadata.files]
 click = [
@@ -143,6 +157,10 @@ markupsafe = [
     {file = "MarkupSafe-2.1.1-cp39-cp39-win32.whl", hash = "sha256:d4306c36ca495956b6d568d276ac11fdd9c30a36f1b6eb928070dc5360b22e1c"},
     {file = "MarkupSafe-2.1.1-cp39-cp39-win_amd64.whl", hash = "sha256:46d00d6cfecdde84d40e572d63735ef81423ad31184100411e6e3388d405e247"},
     {file = "MarkupSafe-2.1.1.tar.gz", hash = "sha256:7f91197cc9e48f989d12e4e6fbc46495c446636dfc81b9ccf50bb0ec74b91d4b"},
+]
+wait-for-it = [
+    {file = "wait-for-it-2.2.1.tar.gz", hash = "sha256:7d834802df52c4acc244123373a4b6eb669f2609ec8887ef7ef4ea8022053eca"},
+    {file = "wait_for_it-2.2.1-py3-none-any.whl", hash = "sha256:c835188b5aa9f63ec2e73473bd880db111f207e25998b4a3946c7b4660f48eba"},
 ]
 werkzeug = [
     {file = "Werkzeug-2.0.3-py3-none-any.whl", hash = "sha256:1421ebfc7648a39a5c58c601b154165d05cf47a3cd0ccb70857cbdacf6c8f2b8"},

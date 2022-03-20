@@ -12,4 +12,9 @@ services:
     environment:
       - FLASK_ENV=development
     command:
+      wait-for-it --service database-service:5432 --timeout=0 --
       python /app/echo.py
+  database-service:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: password
