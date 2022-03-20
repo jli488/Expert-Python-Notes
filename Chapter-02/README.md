@@ -52,5 +52,34 @@ Some modifications compare to the script introduced in the *Dockerfile* and *doc
 
 ### Useful Docker and Docker Compose recipes for Python
 
+- **Reducing the size of containers**
 
+  It is recommended to have a separate image for every service with a container-based approach. This means that with a lot of services, the storage overhead may become noticeable. Two techniques to reduce the image size:
 
+  - Use a base image that is designed for this purpose, e.g. Alpine Linux, which is an example of compact Linux distribution
+  - Take into consideration the characteristics of the Docker overlay filesystem. Docker images consists of layers, where each layer encapsulates the difference in the root filesystem between itself and the previous layer. This means that doing multiple `RUN` instructions can help avoid excessive layer commits
+
+  Taking into the above considerations, we could come up with a new Dockerfile:
+
+  ```dockerfile
+  FROM python:3.9-alpine
+  
+  ARG BUILD_ENV=development
+  
+  WORKDIR /dev_env/
+  
+  COPY requirements.txt poetry.lock pyproject.toml /dev_env/
+  RUN apk add --no-cache gcc libffi-dev musl-dev && \
+      pip3 install -r requirements.txt && \
+      poetry config virtualenvs.create false && \
+      poetry install $(test "$BUILD_ENV" == "production" && echo "--no-dev") --no-interaction --no-ansi && \
+      apk del gcc libffi-dev musl-dev
+  ```
+
+  The above image based from `python:3.9-alpine`, which is a more compact form of python base image, and provide python version control at the mean time. Notice that we also need to manually install some required libraries for building the environment now, such as gcc, libffi-dev, etc.
+
+  With the modification, the image size reduced from ~180MB to ~110MB
+
+- **Addressing services inside of a docker compose environment**
+
+  
