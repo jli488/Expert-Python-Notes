@@ -110,3 +110,72 @@ def get_ci(d: dict[str, Any], key: str) -> Any: ...
 
 ### Positional-only parameters
 
+Python3.8 added the option to define specific arguments as positional-only. Careful consideration as to which arguments should be passed as position-only and which as keyword-only serves to make the definition of functions more susceptible to future changes.
+
+```python
+def concatenate(first: str, second: str, /, *, delim: str):
+    return delim.join([first, second])
+```
+
+- All arguments preceding the `/` mark are **positional-only** arguments
+- All arguments following the `*` mark are **keyword-only** arguments
+
+There can be only one valid function call for the above definition:
+
+```python
+concatenate("John", "Doe", delim=" ")
+```
+
+If one day we want to make the function definition accept an unlimited number of positional arguments. As there is only one way in which this function can be used, we can safely change the function to
+
+```python
+def concatenate(*items, delim: str):
+    return delim.join(items)
+```
+
+### zoneinfo module
+
+Starting from Python3.9, the standard library provides a `zoneinfo` module that is an interface to the time zone database either provided by your operating system or obtained as a first-party `tzdata` package from PyPI
+
+`ZoneInfo` class can be used as a `tzinfo` parameter of the `datetime` object constructor, as in the following example (this will create a zone-aware datetime object)
+
+```python
+from datetime import datetime
+from zoneinfo import ZoneInfo
+dt = datetime(2020, 11, 28, tzinfo=ZoneInfo("Europe/Warsaw"))
+```
+
+You can obtain a full list of all the time zones available in your system using the `zoneinfo.available_timezones()` function
+
+### graphlib module
+
+`graphlib` is a module that provides utilities for working with graph-like data structures. A graph is a data structure consisting of nodes connected by edges. There are two main types of graphs:
+
+- An **undirected graph** is a graph where every edge is undirected. So, if *A* and *B* are connected to edge *E*, you can traverse from *A* to *B* or *B* to *A* using the same edge *E*
+- A **directed graph** is a graph where every edge is directed. So, if an edge *E* starts from *A* and connected to node *B*, then you can traverse from *A* to *B* using *E*, but cannot traverse from *B* to *A*
+
+Moreover, graphs can be either **cyclic** or **acyclic**. A cyclic graph is a graph that has at least one cycle, an acyclic graph is a graph that does not have any cycles.
+
+Specifically, Python3.9 provided `TopologicalSorter` utility to sort DAG based on reachability, the usage looks like:
+
+```python
+from graphlib import TopologicalSorter
+
+# keys are origin nodes and values are sets of destination nodes
+table_reference = {
+    "customers": set(),
+    "accounts": {"customers"},
+    "products": set(),
+    "orders": {"accounts", "customers"},
+    "order_products": {"orders", "products"}
+}
+
+sorter = TopologicalSorter(table_reference)
+print(list(sorter.static_order()))
+# ['customers', 'products', 'accounts', 'orders', 'order_products']
+```
+
+`TopologicalSorter` doesn't check for the existence of cycles during initialization, although it will detect cycles during sorting. If a cycle is found, the `static_order()` method will raise a `graphlib.CycleError` exception.
+
+## Not that new, but still shiny
+
